@@ -4,29 +4,21 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrain;
 
-/** An example command that uses an example subsystem. */
-public class DriveManualCommand extends CommandBase {
-   private final DriveTrain driveTrain;
-   //private final XboxController controller;
-   private final Joystick joystick;
-   private final XboxController controller;
+public class DriveShiftCommand extends CommandBase {
+ 
+  private final DriveTrain driveTrain;
+  private final Solenoid solenoid;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public DriveManualCommand(DriveTrain driveTrain, Joystick joystick, XboxController controller) {
-    this.driveTrain = driveTrain;
-    //this.controller = controller;
-    this.joystick = joystick;
-    this.controller = controller;
+  /** Creates a new DriveShift. */
+
+  public DriveShiftCommand(DriveTrain driveTrain, Solenoid solenoid) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.driveTrain = driveTrain;
+    this.solenoid = solenoid;
     addRequirements(driveTrain);
   }
 
@@ -37,9 +29,10 @@ public class DriveManualCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //driveTrain.driveController(controller);
-    driveTrain.driveJoystick(joystick);
+    // driveTrain.toggle();
+    solenoid.set(true);
   }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
@@ -48,6 +41,6 @@ public class DriveManualCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     driveTrain.reportToShuffleboard(null);
-    return false;
+    return true;
   }
 }
