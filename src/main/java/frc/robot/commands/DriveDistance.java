@@ -30,10 +30,10 @@ public class DriveDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.zeroGyro();
+    System.out.println("Initialize");
     driveTrain.setRightSelectedSensorPosition(0);
-    initialDistance = driveTrain.getRightSelectedSensorPosition();
-
+    initialDistance = Math.abs(driveTrain.getRightSelectedSensorPosition());
+    System.out.println("Right initial distance: " + initialDistance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -51,10 +51,16 @@ public class DriveDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     driveTrain.reportToShuffleboard(null);
-    double currentPosition =  (-1* driveTrain.getRightSelectedSensorPosition()) ;
-    boolean shouldStop = currentPosition > distance;
+    double desiredPosition = initialDistance + distance;
+    // double currentPosition =  (Math.abs(driveTrain.getRightSelectedSensorPosition())) ;
+    // boolean shouldStop = desiredPosition > currentPosition;
 
+   double currentPosition = Math.abs(-1* driveTrain.getRightSelectedSensorPosition()) ;
+   boolean shouldStop = currentPosition >= distance;
+  
     System.out.println(" Asked for Distance " + distance);
+    System.out.println(" Desired Distance " + desiredPosition);
+    System.out.println(" Asked for Current position " + currentPosition);
     System.out.println(" Current position " + currentPosition);
     System.out.println(" Should stop driving " + shouldStop);
     return shouldStop;

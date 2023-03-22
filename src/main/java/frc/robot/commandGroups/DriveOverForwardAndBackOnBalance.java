@@ -7,11 +7,10 @@ package frc.robot.commandGroups;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.BalanceOnStationCommand;
-import frc.robot.commands.DriveForwardOntoChargeStationCommand;
 import frc.robot.commands.DriveForwardOverChargeStationCommand;
 import frc.robot.commands.DriveOnChargeStationCommand;
+import frc.robot.commands.ResetEncoders;
 import frc.robot.commands.TurnAround;
-import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.DriveTrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -23,8 +22,9 @@ public class DriveOverForwardAndBackOnBalance extends SequentialCommandGroup {
   public DriveOverForwardAndBackOnBalance(DriveTrain driveTrain, Joystick joystick) {
     addCommands(
       new DriveForwardOverChargeStationCommand(driveTrain),
-      new TurnAround(driveTrain, 160, 0.5),
-      new DriveForwardOntoChargeStationCommand(driveTrain),
+      new TurnAround(driveTrain, 150, 0.5),
+      new ResetEncoders(driveTrain),
+      new DriveOnChargeStationCommand(driveTrain),
       new BalanceOnStationCommand(driveTrain, joystick)
     );
   }

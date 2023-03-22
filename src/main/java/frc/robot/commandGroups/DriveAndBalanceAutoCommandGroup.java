@@ -7,7 +7,6 @@ package frc.robot.commandGroups;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.BalanceOnStationCommand;
-import frc.robot.commands.DriveForwardOntoChargeStationCommand;
 import frc.robot.commands.DriveForwardOverChargeStationCommand;
 import frc.robot.commands.DriveOnChargeStationCommand;
 import frc.robot.commands.TurnAround;
@@ -21,7 +20,7 @@ public class DriveAndBalanceAutoCommandGroup extends SequentialCommandGroup {
   /** Creates a new ScoreAndDrive. */
   public DriveAndBalanceAutoCommandGroup(DriveTrain driveTrain, Joystick joystick) {
     addCommands(
-      new DriveForwardOntoChargeStationCommand(driveTrain),
+      new DriveOnChargeStationCommand(driveTrain),
       new BalanceOnStationCommand(driveTrain, joystick)
       
     );

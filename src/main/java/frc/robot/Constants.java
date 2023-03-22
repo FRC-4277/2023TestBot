@@ -66,4 +66,17 @@ public static final String LEFT_VERTICAL_JOYSTICK_AXIS = null;{
     public static final int TOP = 8;
     public static final int BOTTOM = 9;
   }
+
+  public static class Lights {
+    public static final int BLUE_R = 0;
+    public static final int BLUE_G = 0;
+    public static final int BLUE_B = 50;
+
+    public static final int ORANGE_R = 50;
+    public static final int ORANGE_G = 10;
+    public static final int ORANGE_B = 0;
+
+    public static final int RAINBOW_FIRST_HUE = 1;
+  }
+
 }

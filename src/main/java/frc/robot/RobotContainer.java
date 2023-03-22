@@ -10,10 +10,18 @@ import frc.robot.commandGroups.ShiftAndAuto;
 import frc.robot.commands.DriveAutoForwardTimedCommand;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveManualCommand;
+import frc.robot.commands.DriveOnChargeStationCommand;
+import frc.robot.commands.LightsBlueAndOrangeChaseCommand;
+import frc.robot.commands.LightsBlueAndOrangeCommand;
+import frc.robot.commands.LightsBlueCommand;
+import frc.robot.commands.LightsOrangeCommand;
+import frc.robot.commands.LightsRainbowCommand;
+import frc.robot.commands.ResetEncoders;
 import frc.robot.commands.TurnAround;
-import frc.robot.commands.TurnToAngle;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.NewGrabber;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Compressor;
@@ -26,12 +34,11 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import static frc.robot.Constants.SOLENOID_TEST;
 
@@ -48,21 +55,25 @@ import static frc.robot.Constants.SOLENOID_TEST;
 public class RobotContainer {
   private static final int XBOX_CONTROLLER = 0;
   private static final int LOGITECH_JOYSTICK = 1;
-  private static final Command driveShiftCommand = null;
+
   //Shuffleboard
+  private final ShuffleboardTab driversTab = Shuffleboard.getTab("Driver");
   private final ShuffleboardTab autonomousTab = Shuffleboard.getTab("Autonomous");
-    private SendableChooser<Command> autoChooser;
-  
+  private final ShuffleboardTab systemsTab = Shuffleboard.getTab("Systems");
+  private final ShuffleboardTab commandsTab = Shuffleboard.getTab("Commands");
+  private SendableChooser<Command> autoChooser;
+
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
   private final NewGrabber newGrabber = new NewGrabber();
+  private final Lights lights = new Lights();
 
   // Pneumatics
   private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
   private final Solenoid solenoidTest = new Solenoid (PneumaticsModuleType.CTREPCM, SOLENOID_TEST);
 
   // Camera
-  //UsbCamera camera = new UsbCamera("camera", 0);
+  UsbCamera camera = new UsbCamera("camera", 0);
 
   // Controllers
   private final XboxController controller =
@@ -81,7 +92,14 @@ public class RobotContainer {
     // Set default commands for subsystems
     driveTrain.setDefaultCommand(driveManualCommand);
     // Set up Shuffleboard
-    setupAutonomousTab();
+    setUpShuffleboard();
+    // Sensors
+    initilizeSensors();
+  }
+
+  public void initilizeSensors() {
+    driveTrain.setRightSelectedSensorPosition(0);
+    driveTrain.zeroGyro();
   }
 
   /**
@@ -137,6 +155,37 @@ public class RobotContainer {
     // An example command will be run in autonomous
     return autoChooser.getSelected();
   }
+
+  private void setUpShuffleboard() {
+    setUpSubsystemsTab();
+    setUpCommandsTab();
+    setUpDriverTab();
+    setupAutonomousTab();
+
+  }
+
+  private void setUpDriverTab() {
+    // driversTab.add("Camera", CameraServer.getServer("USB Camera 0")
+    // .withPosition(0, 0)
+    // .withSize(9, 6);
+  }
+
+  private void setUpSubsystemsTab() {
+    systemsTab.add("Drive train", driveTrain);
+    systemsTab.add("Intake", newGrabber);
+    systemsTab.add("Lights", lights);
+  }
+
+  private void setUpCommandsTab() {
+    commandsTab.add("Lights orange", new LightsOrangeCommand(lights));
+    commandsTab.add("Lights Blue", new LightsBlueCommand(lights));
+    commandsTab.add("Lights Blue and Orange", new LightsBlueAndOrangeCommand(lights));
+    commandsTab.add("Lights Rainbow", new LightsRainbowCommand(lights));
+    commandsTab.add("Lights Blue and Orange Chasing", new LightsBlueAndOrangeChaseCommand(lights));
+    commandsTab.add("Reset Sensor", new ResetEncoders(driveTrain));
+
+  }
+
   private void setupAutonomousTab(){
     autoChooser = new SendableChooser<>();
     SendableRegistry.setName(autoChooser, "Autonomous Command");
@@ -144,10 +193,11 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Nothing", null);
       autoChooser.addOption("Drive Forward Timed", new DriveAutoForwardTimedCommand(driveTrain, 2));
       autoChooser.addOption("Shift And Auto Drive", new ShiftAndAuto( driveTrain, solenoidTest));
-      autoChooser.addOption("Drive Distance", new DriveDistance(driveTrain, 1, 170000, 0.5 ));
-      autoChooser.addOption("Drive Over And Back", new DriveOverForwardAndBackOnBalance(driveTrain, joystick));
-      autoChooser.addOption("Drive Over And Balance", new DriveAndBalanceAutoCommandGroup(driveTrain, joystick));
-      autoChooser.addOption("Turn Around", new TurnAround(driveTrain, 160, 0.5));
+      autoChooser.addOption("Drive on charge station", new DriveOnChargeStationCommand(driveTrain ));
+      autoChooser.addOption("Drive Over And Back and Balance", new DriveOverForwardAndBackOnBalance(driveTrain, joystick));
+      autoChooser.addOption("Drive On And Balance", new DriveAndBalanceAutoCommandGroup(driveTrain, joystick));
+      autoChooser.addOption("Turn Around", new TurnAround(driveTrain, 150, 0.5));
+      autoChooser.addOption("Turn lights rainbow", new LightsRainbowCommand(lights));
       
       autonomousTab.add(autoChooser)
         .withPosition(0, 0)

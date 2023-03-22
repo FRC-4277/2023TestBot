@@ -99,9 +99,6 @@ public class DriveTrain extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public Object toggle() {
-    return null;
-  }
   public void driveTimed(int direction, double speed) {
     System.out.println("start driveTimed direction " + direction);
     System.out.println("start driveTimed speed " + speed);
@@ -116,13 +113,13 @@ public class DriveTrain extends SubsystemBase {
   }
   public void turnToAngle(double speed, double requestedDegrees) {
     System.out.println("start turn to angle");
-    drive.tankDrive(speed, 0);
+    //TODO:  Let's try adding speed to the other side
+    drive.tankDrive(speed, speed);
   }
 
   /* Set power to the drivetrain motors */
-  public void driveForBalance(int direction, double leftPercentPower, double rightPercentPower) {
-    leftGroup.set(direction * leftPercentPower);
-    rightGroup.set(direction * rightPercentPower);
+  public void driveForBalance(double leftPercentPower, double rightPercentPower) {
+    drive.tankDrive(leftPercentPower, rightPercentPower);
   }
 
   public void stop() {

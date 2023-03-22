@@ -12,7 +12,7 @@ import frc.robot.subsystems.DriveTrain;
 public class BalanceOnStationCommand extends CommandBase {
   private final DriveTrain driveTrain;
   private final Joystick joystick;
-  private double error;
+  private double howFarOffAmI;
   private double currentAngle;
   private double drivePower;
   /** Creates a new BalanceOnStationCommand. */
@@ -38,8 +38,8 @@ public class BalanceOnStationCommand extends CommandBase {
      Double currentAngle = -1 * joystick.getX() * 45;
     //this.currentAngle = driveTrain.getPitch();
 
-    error = Constants.Balance.BALANCE_GOAL_DEGREES - currentAngle;
-    drivePower = -Math.min(Constants.Balance.BALANCED_DRIVE_KP * error, 1);
+    howFarOffAmI = Constants.Balance.BALANCE_GOAL_DEGREES - currentAngle;
+    drivePower = -Math.min(Constants.Balance.BALANCED_DRIVE_KP * howFarOffAmI, 1);
 
     // Our robot needed an extra push to drive up in reverse, probably due to weight imbalances
     if (drivePower < 0) {
@@ -51,7 +51,7 @@ public class BalanceOnStationCommand extends CommandBase {
       drivePower = Math.copySign(0.4, drivePower);
     }
 
-    driveTrain.driveForBalance(1, drivePower, drivePower);
+    driveTrain.driveForBalance(drivePower, drivePower);
   }
 
   // Called once the command ends or is interrupted.
@@ -62,10 +62,10 @@ public class BalanceOnStationCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     driveTrain.reportToShuffleboard(null);
-    boolean shouldFinish = Math.abs(error) < Constants.Balance.BALANCE_ANGLE_TRESHOLD_DEGREES;
+    boolean shouldFinish = Math.abs(howFarOffAmI) < Constants.Balance.BALANCE_ANGLE_TRESHOLD_DEGREES;
       // Debugging Print Statments
       System.out.println("Current Angle: " + currentAngle);
-      System.out.println("Error " + error);
+      System.out.println("Error " + howFarOffAmI);
       System.out.println("Drive Power: " + drivePower);
       System.out.println("Should finish " + shouldFinish );
     return shouldFinish; 
