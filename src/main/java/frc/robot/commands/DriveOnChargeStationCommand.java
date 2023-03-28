@@ -11,7 +11,7 @@ public class DriveOnChargeStationCommand extends SequentialCommandGroup {
 
   // List commands here sequentially
   public DriveOnChargeStationCommand(DriveTrain driveTrain) { // List commands here sequentially
-    addCommands(new DriveDistance(driveTrain, 1, 95000, 0.5));
+    addCommands(new DriveDistance(driveTrain, 1, 101000, 0.6));
   }
 
 }

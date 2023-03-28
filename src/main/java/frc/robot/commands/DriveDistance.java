@@ -31,7 +31,7 @@ public class DriveDistance extends CommandBase {
   @Override
   public void initialize() {
     System.out.println("Initialize");
-    driveTrain.setRightSelectedSensorPosition(0);
+    //driveTrain.setRightSelectedSensorPosition(0);
     initialDistance = Math.abs(driveTrain.getRightSelectedSensorPosition());
     System.out.println("Right initial distance: " + initialDistance);
   }
@@ -51,12 +51,12 @@ public class DriveDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     driveTrain.reportToShuffleboard(null);
-    double desiredPosition = initialDistance + distance;
+    double desiredPosition = Math.abs(initialDistance + distance);
     // double currentPosition =  (Math.abs(driveTrain.getRightSelectedSensorPosition())) ;
     // boolean shouldStop = desiredPosition > currentPosition;
 
-   double currentPosition = Math.abs(-1* driveTrain.getRightSelectedSensorPosition()) ;
-   boolean shouldStop = currentPosition >= distance;
+   double currentPosition = Math.abs(driveTrain.getRightSelectedSensorPosition()) ;
+   boolean shouldStop = currentPosition >= desiredPosition;
   
     System.out.println(" Asked for Distance " + distance);
     System.out.println(" Desired Distance " + desiredPosition);

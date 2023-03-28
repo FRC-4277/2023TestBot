@@ -22,8 +22,7 @@ public class DriveOverForwardAndBackOnBalance extends SequentialCommandGroup {
   public DriveOverForwardAndBackOnBalance(DriveTrain driveTrain, Joystick joystick) {
     addCommands(
       new DriveForwardOverChargeStationCommand(driveTrain),
-      new TurnAround(driveTrain, 150, 0.5),
-      new ResetEncoders(driveTrain),
+      new TurnAround(driveTrain, 140, 0.5),
       new DriveOnChargeStationCommand(driveTrain),
       new BalanceOnStationCommand(driveTrain, joystick)
     );

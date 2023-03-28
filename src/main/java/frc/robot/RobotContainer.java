@@ -73,7 +73,7 @@ public class RobotContainer {
   private final Solenoid solenoidTest = new Solenoid (PneumaticsModuleType.CTREPCM, SOLENOID_TEST);
 
   // Camera
-  UsbCamera camera = new UsbCamera("camera", 0);
+  //UsbCamera camera = new UsbCamera("camera", 0);
 
   // Controllers
   private final XboxController controller =
@@ -196,7 +196,7 @@ public class RobotContainer {
       autoChooser.addOption("Drive on charge station", new DriveOnChargeStationCommand(driveTrain ));
       autoChooser.addOption("Drive Over And Back and Balance", new DriveOverForwardAndBackOnBalance(driveTrain, joystick));
       autoChooser.addOption("Drive On And Balance", new DriveAndBalanceAutoCommandGroup(driveTrain, joystick));
-      autoChooser.addOption("Turn Around", new TurnAround(driveTrain, 150, 0.5));
+      autoChooser.addOption("Turn Around", new TurnAround(driveTrain, 140, 0.5));
       autoChooser.addOption("Turn lights rainbow", new LightsRainbowCommand(lights));
       
       autonomousTab.add(autoChooser)

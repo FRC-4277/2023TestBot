@@ -54,7 +54,7 @@ public static final String LEFT_VERTICAL_JOYSTICK_AXIS = null;{
   public static class Balance {
     public static final double BALANCED_DRIVE_KP = 0.015; // P (Proportional) constant of a PID loop
     public static final double BALANCE_GOAL_DEGREES = 0;
-    public static final double BALANCE_ANGLE_TRESHOLD_DEGREES = 1;
+    public static final double BALANCE_ANGLE_TRESHOLD_DEGREES = 0.5;
     public static final double BALANCE_BACKWARD_MULTIPLIER = 1.35;
   }
   

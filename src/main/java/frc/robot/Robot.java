@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.startAutomaticCapture();
+    //CameraServer.startAutomaticCapture();
    // CvSink csSink = CameraServer.getVideo();
     //CvSource outputSteam = CameraServer.putVideo("Blur", 640, 480);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
